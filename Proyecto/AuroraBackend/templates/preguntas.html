@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Preguntas - Aurora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #f59e0b;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --info-color: #3b82f6;
+      
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .session-badge {
+      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .no-test-message {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .no-test-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--warning-color), #f97316);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 2rem;
+    }
+
+    .questions-form {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .question-item {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      background: #f8fafc;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .question-number {
+      background: var(--primary-color);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .option-item:hover {
+      border-color: var(--primary-color);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .option-item:has(input:checked) {
+      border-color: var(--primary-color);
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .option-input {
+      margin-right: 0.75rem;
+      transform: scale(1.1);
+    }
+
+    .option-text {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .textarea-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .textarea-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+      
+      .questions-form {
+        padding: 1.5rem;
+      }
+      
+      .question-item {
+        padding: 1rem;
+      }
+      
+      .header h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>
+        <i class="fas fa-question-circle"></i>
+        Preguntas de la Sesión
+      </h2>
+      <div class="session-badge">
+        <i class="fas fa-bookmark"></i>
+        Sesión {{ sesion_id }}
+      </div>
+    </div>
+
+    {% if sin_test %}
+      <div class="no-test-message">
+        <div class="no-test-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-primary);">Sin test asignado</h3>
+        <p style="color: var(--text-secondary); font-size: 1.1rem;">Esta sesión no tiene un test asignado en este momento.</p>
+      </div>
+    {% else %}
+      <div class="questions-form">
+        <form method="post">
+          {% for it in items %}
+            <div class="question-item">
+              <div class="question-header">
+                <div class="question-number">{{ loop.index }}</div>
+                <div class="question-text">{{ it.enunciado }}</div>
+              </div>
+
+              {% if it.tipo == 'Alternativa' %}
+                <div class="options-container">
+                  {% for op in it.opciones %}
+                    {% if op.txt %}
+                      <label class="option-item">
+                        <input type="radio" name="pregunta_{{ it.id }}" value="{{ op.key }}" required class="option-input">
+                        <span class="option-text">({{ op.key }}) {{ op.txt }}</span>
+                      </label>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% else %}
+                <textarea 
+                  name="pregunta_{{ it.id }}" 
+                  class="textarea-input" 
+                  placeholder="Escribe tu respuesta aquí..."
+                  required
+                ></textarea>
+              {% endif %}
+            </div>
+          {% endfor %}
+          
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            Enviar Respuestas
+          </button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

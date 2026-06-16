@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - Aurora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #fbbf24, var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .glims-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .glims-count i {
+            color: var(--warning-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .item-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 150px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .item-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .item-image .placeholder {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .item-price {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+        }
+
+        .buy-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .buy-button:active {
+            transform: translateY(0);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .skin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .skin-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a span {
+                display: none;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .store-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            color: var(--warning-color);
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/dashboard" class="logo">
+                <i class="fas fa-star"></i>
+                Aurora
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="/tienda" class="active"><i class="fas fa-store"></i> Tienda</a>
+                <a href="/inventario"><i class="fas fa-backpack"></i> Inventario</a>
+                <a href="/desafio/asignaturas"><i class="fas fa-book"></i> Asignaturas</a>
+                <a href="/estudio"><i class="fas fa-graduation-cap"></i> Material</a>
+            </div>
+            <div class="user-info">
+                <div class="glims-count">
+                    <i class="fas fa-coins"></i>
+                    <span id="glims-amount">{{ glims or 0 }}</span> Glims
+                </div>
+                {% if skin_activa and skin_activa.Imagen %}
+                    <img src="{{ skin_activa.Imagen }}" alt="Skin activa" class="skin-avatar">
+                {% else %}
+                    <i class="fas fa-user-circle" style="font-size: 2rem; color: #6366f1;"></i>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-store"></i>
+                Tienda de Skins
+            </h1>
+            <p class="page-subtitle">¡Personaliza tu avatar con increíbles skins!</p>
+        </div>
+
+        {% if items %}
+            <div class="store-grid">
+                {% for item in items %}
+                    <div class="item-card">
+                        <div class="sparkle" style="top: 10px; right: 15px;">✨</div>
+                        <div class="item-image">
+                            {% if item.Imagen %}
+                                <img src="{{ item.Imagen }}" alt="{{ item.Nombre }}">
+                            {% else %}
+                                <div class="placeholder">
+                                    <i class="fas fa-image" style="font-size: 2rem;"></i>
+                                    <span>Sin imagen</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <h3 class="item-name">{{ item.Nombre }}</h3>
+                        {% if item.Descripcion %}
+                            <p class="item-description">{{ item.Descripcion }}</p>
+                        {% endif %}
+                        <div class="item-price">
+                            <i class="fas fa-coins"></i>
+                            {{ item.Costo }} Glims
+                        </div>
+                        <form method="post" action="/comprar/{{ item.idItem }}">
+                            <button type="submit" class="buy-button">
+                                <i class="fas fa-shopping-cart"></i>
+                                Comprar
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-store-slash"></i>
+                <h3>¡Tienda temporalmente cerrada!</h3>
+                <p>No hay ítems disponibles en este momento. ¡Vuelve pronto!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Animación de sparkles aleatorios
+        function createSparkle() {
+            const sparkles = document.querySelectorAll('.sparkle');
+            sparkles.forEach(sparkle => {
+                const delay = Math.random() * 3000;
+                sparkle.style.animationDelay = delay + 'ms';
+            });
+        }
+
+        // Efecto de compra
+        document.querySelectorAll('.buy-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const glims = parseInt(document.getElementById('glims-amount').textContent);
+                const price = parseInt(this.closest('.item-card').querySelector('.item-price').textContent.match(/\d+/)[0]);
+                
+                if (glims < price) {
+                    e.preventDefault();
+                    alert('¡No tienes suficientes Glims! 💰');
+                    return;
+                }
+                
+                // Animación de éxito
+                this.innerHTML = '<i class="fas fa-check"></i> ¡Comprando!';
+                this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            });
+        });
+
+        createSparkle();
+    </script>
+</body>
+</html>

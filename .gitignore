@@ -1,0 +1,17 @@
+﻿# Ignorar venv en raíz y en subcarpetas
+venv/
+**/venv/
+
+# Secretos / entornos
+.env
+.env.*
+
+# Python / IDE / OS
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+.vscode/
+.DS_Store
+Thumbs.db
+*.sqlite3

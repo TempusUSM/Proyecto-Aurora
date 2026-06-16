@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Aurora</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<!-- Librería para renderizar Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #f59e0b;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    min-height: 100vh;
+    display: block;
+}
+
+/* Navigation */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+    padding: 1rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);    
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.nav-container {
+    max-width: 1300px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+.nav-brand {
+    color: white;
+    font-size: 1.7rem;
+    font-weight: 800;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+.nav-link {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    padding: .4rem 1rem;
+    border-radius: 8px;
+}
+.nav-link:hover {
+    background: rgba(255,255,255,0.2);
+}
+.user-info { display: flex; align-items: center; gap: 1rem; color: white; }
+.glims-counter { background: rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: var(--radius-lg); font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+.glims-counter i { color: var(--warning-color); }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.3); object-fit: cover; transition: transform 0.3s ease; }
+.user-avatar:hover { transform: scale(1.1); }
+
+/* Main Content */
+.main-container {
+    max-width: 1300px;
+    margin: 2.5rem auto;
+    display: flex;
+    justify-content: center;
+}
+
+/* Avatar grande */
+.aurora-avatar-panel {
+    width: 38%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#auroraAvatarGrande {
+    width: 90%;
+    max-width: 420px;
+    border-radius: 18px;
+    transition: all 0.35s ease-in-out;
+}
+
+/* Chat */
+.chat-panel {
+    width: 60%;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.chat-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+.chat-box {
+    height: 400px;        /* ✅ altura fija del chat */
+    max-height: 400px;    /* ✅ evita que crezca más */
+    padding: 15px;
+    overflow-y: auto;     /* ✅ scroll vertical */
+    background: #f7f7f7;
+    scroll-behavior: smooth;
+}
+
+
+/* Burbuja mensajes */
+.message {
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 70%;
+}
+.user {
+    background: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+}
+.aurora-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.aurora-container img {
+    width: 40px;
+    height: 40px;
+}
+.message.aurora { background: #ececec; }
+
+/* Input chat */
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #999;
+}
+.chat-input button {
+    margin-left: 10px;
+    padding: 10px 18px;
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 20px;
+}
+.chat-input button:hover { background: #5548c8; }
+
+/* Markdown styles */
+.message.aurora strong { font-weight: bold; color: #1e293b; }
+.message.aurora em { font-style: italic; }
+.message.aurora ul, .message.aurora ol { margin-left: 1.2rem; margin-top: 0.5rem; }
+.message.aurora li { margin-bottom: 0.3rem; }
+.message.aurora p { margin: 0.4rem 0; }
+.message.aurora code { background: #f3f4f6; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+.message.aurora a { color: #3b82f6; text-decoration: underline; }
+
+/* Animations */
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+@keyframes girar { 0% { transform: rotate(0deg); } 50% { transform: rotate(10deg); } 100% { transform: rotate(0deg); } }
+.confetti { position: fixed; width: 10px; height: 10px; background-color: red; opacity: 0.8; z-index: 9999; pointer-events: none; border-radius: 50%; animation: confetiAnim linear forwards; }
+@keyframes confetiAnim { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(600px) rotate(360deg); opacity: 0; } }
+</style>
+
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/dashboard" class="nav-brand"><i class="fas fa-star"></i>Aurora</a>
+        <div class="nav-links">
+            <a href="/tienda" class="nav-link"><i class="fas fa-store"></i><span>Tienda</span></a>
+            <a href="/inventario" class="nav-link"><i class="fas fa-backpack"></i><span>Inventario</span></a>
+            <a href="/estudio" class="nav-link"><i class="fas fa-book"></i><span>Estudio</span></a>
+            <a href="/chatbot" class="nav-link"><i class="fas fa-robot"></i><span>Chatbot</span></a>
+        </div>
+        <div class="user-info">
+          <a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</nav>
+
+<main class="main-container">
+
+    <!-- ✅ Avatar grande -->
+    <div class="aurora-avatar-panel">
+        <img id="auroraAvatarGrande" src="/statics/expresiones/AURORAPENSATIVA.png" alt="Aurora Avatar Grande">
+    </div>
+
+    <!-- ✅ Chat -->
+    <div class="chat-panel">
+        <div class="chat-header">Chatbot Aurora</div>
+        <div id="chatBox" class="chat-box"></div>
+
+        <div class="chat-input">
+            <input type="text" id="mensaje" placeholder="Escribe tu mensaje...">
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+    </div>
+</main>
+
+<script>
+const RUT_ESTUDIANTE = "{{ rut_estudiante }}";
+const SESION_ID = 1;
+const chatBox = document.getElementById("chatBox");
+const inputMensaje = document.getElementById("mensaje");
+const expresionesAurora = ["ANIMANDO","CONFETTI","EXPLICANDO","FELIZ","PENSATIVA","SALUDANDO","TRISTE"];
+
+// Escoger expresión según contenido
+function elegirExpresion(respuesta) {
+    const texto = respuesta.toLowerCase();
+    if (texto.includes("error") || texto.includes("no entiendo") || texto.includes("mal")) return "TRISTE";
+    if (texto.includes("felic") || texto.includes("perfecto") || texto.includes("genial") || texto.includes("😊")) return "CONFETTI";
+    if (texto.includes("hola") || texto.includes("buenos días") || texto.includes("saludos")) return "SALUDANDO";
+    if (texto.includes("explicación") || texto.includes("te explico") || texto.includes("claro")) return "EXPLICANDO";
+    if (texto.includes("gracias") || texto.includes("😁") || texto.includes("feliz")) return "FELIZ";
+    return "PENSATIVA";
+}
+
+// Convertir Markdown -> HTML
+function renderMarkdownToHTML(markdownText) {
+    return marked.parse(markdownText, { breaks: true, gfm: true });
+}
+
+// Mensaje Aurora
+function agregarMensajeAurora(texto, expresion = "FELIZ") {
+    if (!expresionesAurora.includes(expresion)) expresion = "FELIZ";
+    const container = document.createElement("div");
+    container.className = "aurora-container";
+
+    const img = document.createElement("img");
+    img.src = `/statics/expresiones/AURORA${expresion}.png`;
+    img.alt = "Aurora";
+
+    const mensaje = document.createElement("div");
+    mensaje.className = "message aurora";
+    mensaje.innerHTML = renderMarkdownToHTML(texto); // 🔹 Markdown a HTML
+
+    container.appendChild(img);
+    container.appendChild(mensaje);
+    chatBox.appendChild(container);
+    //Cambiar avatar grande también
+    document.getElementById("auroraAvatarGrande").src = `/statics/expresiones/AURORA${expresion}.png`;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (expresion === "CONFETTI") lanzarConfeti();
+}
+
+// Mensaje del usuario (seguro)
+function agregarMensajeUsuario(texto) {
+    const p = document.createElement("div");
+    p.className = "message user";
+    p.textContent = texto;
+    chatBox.appendChild(p);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Mostrar escribiendo
+function mostrarEscribiendoAurora(expresion="PENSATIVA") {
+    const container = document.createElement("div");
+    container.id = "typing";
+    container.className = "aurora-container";
+    const img = document.createElement("img");
+    img.src = `/statics/expresiones/AURORA${expresion}.png`;
+    img.alt = "Aurora";
+    img.classList.add("escribiendo");
+    const mensaje = document.createElement("div");
+    mensaje.className = "message aurora";
+    mensaje.innerText = "Aurora está escribiendo...";
+    container.appendChild(img);
+    container.appendChild(mensaje);
+    chatBox.appendChild(container);
+    //Cambiar avatar grande también
+    document.getElementById("auroraAvatarGrande").src = `/statics/expresiones/AURORA${expresion}.png`;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Historial
+async function cargarHistorial() {
+    try {
+        const res = await fetch("/chatbot/historial");
+        const data = await res.json();
+        data.forEach(r => {
+            if (r.remitente === "estudiante") agregarMensajeUsuario(r.mensaje);
+            else agregarMensajeAurora(r.mensaje, elegirExpresion(r.mensaje));
+        });
+    } catch (error) {
+        console.error("Error al cargar historial:", error);
+    }
+}
+
+// Enviar mensaje
+async function enviarMensaje() {
+    const mensaje = inputMensaje.value.trim();
+    if (!mensaje) return;
+    agregarMensajeUsuario(mensaje);
+    inputMensaje.value = "";
+    mostrarEscribiendoAurora();
+    try {
+        const res = await fetch("/chatbot/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: mensaje })
+        });
+        const data = await res.json();
+        const typing = document.getElementById("typing");
+        if (typing) typing.remove();
+        agregarMensajeAurora(data.aurora, elegirExpresion(data.aurora));
+    } catch (error) {
+        const typing = document.getElementById("typing");
+        if (typing) typing.remove();
+        agregarMensajeAurora("Error al enviar mensaje.", "TRISTE");
+    }
+}
+
+// Confetti
+function lanzarConfeti() {
+    const colores = ["#ff0a54","#ff477e","#ff7096","#ff85a1","#fbb1b1","#f9bec7","#f7cad0","#fae0e4"];
+    for(let i=0;i<30;i++){
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.backgroundColor = colores[Math.floor(Math.random()*colores.length)];
+        confetti.style.left = Math.random()*window.innerWidth + "px";
+        confetti.style.width = 5+Math.random()*10 + "px";
+        confetti.style.height = confetti.style.width;
+        confetti.style.animationDuration = 2+Math.random()*2+"s";
+        document.body.appendChild(confetti);
+        setTimeout(()=>confetti.remove(),4000);
+    }
+}
+
+inputMensaje.addEventListener("keydown", e => { if (e.key === "Enter") enviarMensaje(); });
+
+window.onload = () => {
+    agregarMensajeAurora("¡Hola! Soy Aurora, tu asistente virtual. 😄", "FELIZ");
+    cargarHistorial();
+};
+</script>
+</body>
+</html> 

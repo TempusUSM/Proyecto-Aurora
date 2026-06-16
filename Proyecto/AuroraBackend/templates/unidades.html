@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidades - Aurora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #6366f1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 193, 7, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 2px solid #ffc107;
+        }
+
+        .glims-count {
+            font-weight: 700;
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subject-name {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .unit-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .unit-card.unlocked {
+            border-color: #10b981;
+        }
+
+        .unit-card.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .unit-card.locked {
+            opacity: 0.7;
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.1), rgba(100, 116, 139, 0.1));
+        }
+
+        .unit-card.locked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #94a3b8, #64748b);
+        }
+
+        .unit-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .unit-number {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .unit-number.locked {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+        }
+
+        .unit-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .unit-status.unlocked {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .unit-status.locked {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .unit-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .unit-title.locked {
+            color: #64748b;
+        }
+
+        .unit-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .unit-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+
+        .view-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .locked-button {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid #6366f1;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .units-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .unit-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        .progress-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .progress-indicator.unlocked {
+            background: #10b981;
+            color: white;
+        }
+
+        .progress-indicator.locked {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/dashboard" class="logo">
+                <i class="fas fa-star"></i>
+                Aurora
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="/tienda"><i class="fas fa-store"></i> Tienda</a>
+                <a href="/inventario"><i class="fas fa-backpack"></i> Inventario</a>
+                <a href="/desafio/asignaturas"><i class="fas fa-book"></i> Asignaturas</a>
+                <a href="/estudio"><i class="fas fa-graduation-cap"></i> Material</a>
+            </div>
+            <div class="user-info">
+                <div class="glims-count">
+                    <i class="fas fa-coins"></i>
+                    <span>{{ glims or 0 }}</span> Glims
+                </div>
+                {% if skin_activa and skin_activa.Imagen %}
+                    <img src="{{ skin_activa.Imagen }}" alt="Skin activa" class="skin-avatar">
+                {% else %}
+                    <i class="fas fa-user-circle" style="font-size: 2rem; color: #6366f1;"></i>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="/dashboard">Dashboard</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="/desafio/asignaturas">Asignaturas</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Unidades</span>
+            </div>
+            <h1 class="page-title">
+                <i class="fas fa-layer-group"></i>
+                Unidades
+            </h1>
+            <p class="subject-name">{{ asignatura.Nombre }}</p>
+        </div>
+
+        {% if unidades_estado %}
+            <div class="units-grid">
+                {% for u, unlocked in unidades_estado %}
+                    <div class="unit-card {% if unlocked %}unlocked{% else %}locked{% endif %}">
+                        <div class="progress-indicator {% if unlocked %}unlocked{% else %}locked{% endif %}">
+                            <i class="fas fa-{% if unlocked %}unlock{% else %}lock{% endif %}"></i>
+                        </div>
+                        
+                        <div class="unit-header">
+                            <div class="unit-number {% if not unlocked %}locked{% endif %}">
+                                {{ u.Numero }}
+                            </div>
+                            <div class="unit-status {% if unlocked %}unlocked{% else %}locked{% endif %}">
+                                <i class="fas fa-{% if unlocked %}check-circle{% else %}lock{% endif %}"></i>
+                                {% if unlocked %}Disponible{% else %}Bloqueada{% endif %}
+                            </div>
+                        </div>
+
+                        <h3 class="unit-title {% if not unlocked %}locked{% endif %}">
+                            Unidad {{ u.Numero }}
+                        </h3>
+                        
+                        <p class="unit-description">{{ u.Descripcion }}</p>
+
+                        <div class="unit-actions">
+                            {% if unlocked %}
+                                <a href="/desafio/sesiones/{{ u.idUnidad }}" class="action-button view-button">
+                                    <i class="fas fa-play"></i>
+                                    Ver Sesiones
+                                </a>
+                            {% else %}
+                                <button class="action-button locked-button" disabled>
+                                    <i class="fas fa-lock"></i>
+                                    Bloqueada
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-layer-group"></i>
+                <h3>¡No hay unidades disponibles!</h3>
+                <p>Esta asignatura aún no tiene unidades definidas.</p>
+            </div>
+        {% endif %}
+
+        <a href="/desafio/asignaturas" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Volver a Asignaturas
+        </a>
+    </div>
+
+    <script>
+        // Animación de entrada para las tarjetas
+        const cards = document.querySelectorAll('.unit-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+
+        // Efecto de hover para unidades desbloqueadas
+        document.querySelectorAll('.unit-card.unlocked').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Efecto de click en botones desbloqueados
+        document.querySelectorAll('.view-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+START TRANSACTION;
+
+-- ======================================================
+-- UNIDAD 3 (nueva) + vínculo al curso 1
+-- ======================================================
+INSERT INTO `unidad` (`idUnidad`, `Numero`, `Descripcion`, `AsignaturaId`)
+VALUES (3, 3.0, 'Gramática y ortografía', 2);
+
+INSERT INTO `curso_has_unidad` (`CursoId`, `UnidadId`)
+VALUES (1, 3);
+
+-- ======================================================
+-- SESIONES (3 por unidad). Ya existen idSesion 1 y 2.
+-- U1: añadimos 2 más (3,4)
+-- U2: añadimos 2 más (5,6)
+-- U3: 3 nuevas (7,8,9)
+-- ======================================================
+INSERT INTO `sesion` (`idSesion`, `Bitacora`, `ObjetivoAprendizaje`, `UnidadId`) VALUES
+  -- Unidad 1: Comprensión de textos
+  (3, 'Lectura estratégica', 'Identificar idea principal y detalles explícitos', 1),
+  (4, 'Cohesión textual', 'Usar conectores para mejorar coherencia', 1),
+
+  -- Unidad 2: Producción escrita
+  (5, 'Planificación de cuentos', 'Planificar narraciones con estructura clásica', 2),
+  (6, 'Diálogo y puntuación', 'Aplicar reglas de puntuación en diálogos', 2),
+
+  -- Unidad 3: Gramática y ortografía
+  (7, 'Acentuación', 'Aplicar reglas de acentuación en palabras frecuentes', 3),
+  (8, 'Clases de palabras', 'Reconocer sustantivos, adjetivos y verbos', 3),
+  (9, 'Pronombres y concordancia', 'Usar pronombres y mantener concordancia', 3);
+
+-- ======================================================
+-- SECCIONES para agrupar enunciados de cada sesión
+-- (ya existe idSeccionP = 1)
+-- ======================================================
+INSERT INTO `seccion_p` (`idSeccionP`, `Descripcion`) VALUES
+  (2, 'U1 - Estrategias de lectura'),
+  (3, 'U1 - Conectores y coherencia'),
+  (4, 'U2 - Planificación de cuentos'),
+  (5, 'U2 - Diálogo y puntuación'),
+  (6, 'U3 - Acentuación'),
+  (7, 'U3 - Clases de palabras'),
+  (8, 'U3 - Pronombres y concordancia');
+
+-- ======================================================
+-- TESTS (uno por sesión). Ya existen idTest 1 y 2.
+-- ======================================================
+INSERT INTO `test` (`idTest`, `Puntaje`, `Descripcion`, `SesionId`) VALUES
+  (3, 10, 'Desafío: idea principal y detalles', 3),
+  (4, 10, 'Desafío: conectores y coherencia', 4),
+  (5, 10, 'Desafío: planificación de cuentos', 5),
+  (6, 10, 'Desafío: diálogo y puntuación', 6),
+  (7, 10, 'Desafío: acentuación', 7),
+  (8, 10, 'Desafío: clases de palabras', 8),
+  (9, 10, 'Desafío: pronombres y concordancia', 9);
+
+-- ======================================================
+-- PREGUNTAS (2 por test): 1 Alternativa + 1 Desarrollo
+-- Ya existen idPregunta 1..4. Agregamos 5..18.
+-- ======================================================
+INSERT INTO `pregunta` (`idPregunta`, `Tipo`, `Puntaje`) VALUES
+  (5,  'Alternativa', 5), (6,  'Desarrollo', 5),   -- Test 3
+  (7,  'Alternativa', 5), (8,  'Desarrollo', 5),   -- Test 4
+  (9,  'Alternativa', 5), (10, 'Desarrollo', 5),   -- Test 5
+  (11, 'Alternativa', 5), (12, 'Desarrollo', 5),   -- Test 6
+  (13, 'Alternativa', 5), (14, 'Desarrollo', 5),   -- Test 7
+  (15, 'Alternativa', 5), (16, 'Desarrollo', 5),   -- Test 8
+  (17, 'Alternativa', 5), (18, 'Desarrollo', 5);   -- Test 9
+
+-- ======================================================
+-- ALTERNATIVAS (una por test)
+-- ======================================================
+INSERT INTO `p_alternativas`
+(`idPregunta`, `Enunciado`, `PA`, `PB`, `PC`, `PD`, `Correcta`, `SeccionPId`) VALUES
+  -- Test 3 (Sesión 3 - U1)
+  (5,
+   'Parrafo: Los parques ofrecen espacios para jugar y hacer ejercicio, lo que beneficia la salud de la comunidad. ¿Cuál es la idea principal?',
+   'Los parques tienen arboles',
+   'Los parques benefician a la comunidad',
+   'Algunas personas trotan',
+   'Los juegos son divertidos',
+   'Los parques benefician a la comunidad', 2),
+
+  -- Test 4 (Sesión 4 - U1)
+  (7,
+   'Elige el conector que CONTRASTA correctamente: Estudie mucho; ____, el resultado no fue el esperado.',
+   'porque',
+   'sin embargo',
+   'ademas',
+   'por eso',
+   'sin embargo', 3),
+
+  -- Test 5 (Sesión 5 - U2)
+  (9,
+   '¿Cuál es el orden correcto de la estructura narrativa clásica?',
+   'Desenlace, nudo, planteamiento',
+   'Planteamiento, nudo, desenlace',
+   'Nudo, planteamiento, desenlace',
+   'Planteamiento, desenlace, nudo',
+   'Planteamiento, nudo, desenlace', 4),
+
+  -- Test 6 (Sesión 6 - U2)
+  (11,
+   'Selecciona la opción con puntuacion correcta para el dialogo: Maria dijo vamos al parque',
+   'Maria dijo vamos al parque.',
+   'Maria dijo: "Vamos al parque".',
+   'Maria dijo; Vamos al parque.',
+   '"Maria dijo: Vamos al parque".',
+   'Maria dijo: "Vamos al parque".', 5),
+
+  -- Test 7 (Sesión 7 - U3)
+  (13,
+   '¿Cuál palabra lleva tilde segun las reglas de acentuacion?',
+   'cafe',
+   'café',
+   'reloj',
+   'sofá',
+   'café', 6),
+
+  -- Test 8 (Sesión 8 - U3)
+  (15,
+   'En la oracion "El perro corre rapido", ¿que clase de palabra es "corre"?',
+   'sustantivo',
+   'adjetivo',
+   'verbo',
+   'preposicion',
+   'verbo', 7),
+
+  -- Test 9 (Sesión 9 - U3)
+  (17,
+   'Completa con el pronombre adecuado: Maria y Ana ____ fueron al cine.',
+   'la',
+   'ellas',
+   'ella',
+   'les',
+   'ellas', 8);
+
+-- ======================================================
+-- DESARROLLO (una por test) - nota: idPDesarrollo continua en 3..9
+-- ======================================================
+INSERT INTO `p_desarrollo`
+(`idPDesarrollo`, `idPregunta`, `Enunciado`, `RespuestaEsperada`, `SeccionPId`) VALUES
+  -- Test 3 (Sesión 3 - U1)
+  (3, 6,
+   'Menciona dos detalles del parrafo que apoyen la idea principal.',
+   'Detalles validos: espacios para jugar; ejercicio; beneficios para la salud; uso comunitario.',
+   2),
+
+  -- Test 4 (Sesión 4 - U1)
+  (4, 8,
+   'Une dos oraciones usando "sin embargo" y otras dos usando "ademas".',
+   'Debe mostrar contraste correcto con "sin embargo" y adicion con "ademas", manteniendo coherencia y puntuacion.',
+   3),
+
+  -- Test 5 (Sesión 5 - U2)
+  (5, 10,
+   'Esboza el plan de un cuento: protagonista, conflicto y desenlace en 3-4 lineas.',
+   'Debe incluir protagonista claro, conflicto coherente y desenlace plausible (orden: planteamiento-nudo-desenlace).',
+   4),
+
+  -- Test 6 (Sesión 6 - U2)
+  (6, 12,
+   'Escribe dos lineas de dialogo aplicando comillas y uso basico del guion o raya.',
+   'Uso correcto de comillas para el parlamento y signos de puntuacion; coherencia entre interlocutores.',
+   5),
+
+  -- Test 7 (Sesión 7 - U3)
+  (7, 14,
+   'Explica la regla de acentuacion de las palabras agudas y da dos ejemplos.',
+   'Define agudas (tilde si terminan en n, s o vocal) y entrega ejemplos correctos tildados.',
+   6),
+
+  -- Test 8 (Sesión 8 - U3)
+  (8, 16,
+   'Escribe una oracion que incluya un sustantivo, un adjetivo y un verbo, subraya cada uno.',
+   'Debe contener las tres clases solicitadas y ser gramaticalmente correcta.',
+   7),
+
+  -- Test 9 (Sesión 9 - U3)
+  (9, 18,
+   'Reescribe el siguiente texto evitando repeticiones mediante pronombres: "Ana vio a Ana en el patio y Ana saludo a Ana".',
+   'Uso adecuado de pronombres para evitar repeticion y mantener concordancia (ej.: "Ana vio a ella en el patio y la saludo").',
+   8);
+
+-- ======================================================
+-- VINCULOS TEST-PREGUNTA
+-- ======================================================
+INSERT INTO `test_has_pregunta` (`TestId`, `PreguntaId`) VALUES
+  (3, 5),  (3, 6),
+  (4, 7),  (4, 8),
+  (5, 9),  (5, 10),
+  (6, 11), (6, 12),
+  (7, 13), (7, 14),
+  (8, 15), (8, 16),
+  (9, 17), (9, 18);
+
+START TRANSACTION;
+
+-- ======================================================
+-- UNIDAD 3 (nueva) + vínculo al curso 1
+-- ======================================================
+INSERT INTO `unidad` (`idUnidad`, `Numero`, `Descripcion`, `AsignaturaId`)
+VALUES (3, 3.0, 'Gramática y ortografía', 2);
+
+INSERT INTO `curso_has_unidad` (`CursoId`, `UnidadId`)
+VALUES (1, 3);
+
+-- ======================================================
+-- SESIONES (3 por unidad). Ya existen idSesion 1 y 2.
+-- U1: añadimos 2 más (3,4)
+-- U2: añadimos 2 más (5,6)
+-- U3: 3 nuevas (7,8,9)
+-- ======================================================
+INSERT INTO `sesion` (`idSesion`, `Bitacora`, `ObjetivoAprendizaje`, `UnidadId`) VALUES
+  -- Unidad 1: Comprensión de textos
+  (3, 'Lectura estratégica', 'Identificar idea principal y detalles explícitos', 1),
+  (4, 'Cohesión textual', 'Usar conectores para mejorar coherencia', 1),
+
+  -- Unidad 2: Producción escrita
+  (5, 'Planificación de cuentos', 'Planificar narraciones con estructura clásica', 2),
+  (6, 'Diálogo y puntuación', 'Aplicar reglas de puntuación en diálogos', 2),
+
+  -- Unidad 3: Gramática y ortografía
+  (7, 'Acentuación', 'Aplicar reglas de acentuación en palabras frecuentes', 3),
+  (8, 'Clases de palabras', 'Reconocer sustantivos, adjetivos y verbos', 3),
+  (9, 'Pronombres y concordancia', 'Usar pronombres y mantener concordancia', 3);
+
+-- ======================================================
+-- SECCIONES para agrupar enunciados de cada sesión
+-- (ya existe idSeccionP = 1)
+-- ======================================================
+INSERT INTO `seccion_p` (`idSeccionP`, `Descripcion`) VALUES
+  (2, 'U1 - Estrategias de lectura'),
+  (3, 'U1 - Conectores y coherencia'),
+  (4, 'U2 - Planificación de cuentos'),
+  (5, 'U2 - Diálogo y puntuación'),
+  (6, 'U3 - Acentuación'),
+  (7, 'U3 - Clases de palabras'),
+  (8, 'U3 - Pronombres y concordancia');
+
+-- ======================================================
+-- TESTS (uno por sesión). Ya existen idTest 1 y 2.
+-- ======================================================
+INSERT INTO `test` (`idTest`, `Puntaje`, `Descripcion`, `SesionId`) VALUES
+  (3, 10, 'Desafío: idea principal y detalles', 3),
+  (4, 10, 'Desafío: conectores y coherencia', 4),
+  (5, 10, 'Desafío: planificación de cuentos', 5),
+  (6, 10, 'Desafío: diálogo y puntuación', 6),
+  (7, 10, 'Desafío: acentuación', 7),
+  (8, 10, 'Desafío: clases de palabras', 8),
+  (9, 10, 'Desafío: pronombres y concordancia', 9);
+
+-- ======================================================
+-- PREGUNTAS (2 por test): 1 Alternativa + 1 Desarrollo
+-- Ya existen idPregunta 1..4. Agregamos 5..18.
+-- ======================================================
+INSERT INTO `pregunta` (`idPregunta`, `Tipo`, `Puntaje`) VALUES
+  (5,  'Alternativa', 5), (6,  'Desarrollo', 5),   -- Test 3
+  (7,  'Alternativa', 5), (8,  'Desarrollo', 5),   -- Test 4
+  (9,  'Alternativa', 5), (10, 'Desarrollo', 5),   -- Test 5
+  (11, 'Alternativa', 5), (12, 'Desarrollo', 5),   -- Test 6
+  (13, 'Alternativa', 5), (14, 'Desarrollo', 5),   -- Test 7
+  (15, 'Alternativa', 5), (16, 'Desarrollo', 5),   -- Test 8
+  (17, 'Alternativa', 5), (18, 'Desarrollo', 5);   -- Test 9
+
+-- ======================================================
+-- ALTERNATIVAS (una por test)
+-- ======================================================
+INSERT INTO `p_alternativas`
+(`idPregunta`, `Enunciado`, `PA`, `PB`, `PC`, `PD`, `Correcta`, `SeccionPId`) VALUES
+  -- Test 3 (Sesión 3 - U1)
+  (5,
+   'Parrafo: Los parques ofrecen espacios para jugar y hacer ejercicio, lo que beneficia la salud de la comunidad. ¿Cuál es la idea principal?',
+   'Los parques tienen arboles',
+   'Los parques benefician a la comunidad',
+   'Algunas personas trotan',
+   'Los juegos son divertidos',
+   'Los parques benefician a la comunidad', 2),
+
+  -- Test 4 (Sesión 4 - U1)
+  (7,
+   'Elige el conector que CONTRASTA correctamente: Estudie mucho; ____, el resultado no fue el esperado.',
+   'porque',
+   'sin embargo',
+   'ademas',
+   'por eso',
+   'sin embargo', 3),
+
+  -- Test 5 (Sesión 5 - U2)
+  (9,
+   '¿Cuál es el orden correcto de la estructura narrativa clásica?',
+   'Desenlace, nudo, planteamiento',
+   'Planteamiento, nudo, desenlace',
+   'Nudo, planteamiento, desenlace',
+   'Planteamiento, desenlace, nudo',
+   'Planteamiento, nudo, desenlace', 4),
+
+  -- Test 6 (Sesión 6 - U2)
+  (11,
+   'Selecciona la opción con puntuacion correcta para el dialogo: Maria dijo vamos al parque',
+   'Maria dijo vamos al parque.',
+   'Maria dijo: "Vamos al parque".',
+   'Maria dijo; Vamos al parque.',
+   '"Maria dijo: Vamos al parque".',
+   'Maria dijo: "Vamos al parque".', 5),
+
+  -- Test 7 (Sesión 7 - U3)
+  (13,
+   '¿Cuál palabra lleva tilde segun las reglas de acentuacion?',
+   'cafe',
+   'café',
+   'reloj',
+   'sofá',
+   'café', 6),
+
+  -- Test 8 (Sesión 8 - U3)
+  (15,
+   'En la oracion "El perro corre rapido", ¿que clase de palabra es "corre"?',
+   'sustantivo',
+   'adjetivo',
+   'verbo',
+   'preposicion',
+   'verbo', 7),
+
+  -- Test 9 (Sesión 9 - U3)
+  (17,
+   'Completa con el pronombre adecuado: Maria y Ana ____ fueron al cine.',
+   'la',
+   'ellas',
+   'ella',
+   'les',
+   'ellas', 8);
+
+-- ======================================================
+-- DESARROLLO (una por test) - nota: idPDesarrollo continua en 3..9
+-- ======================================================
+INSERT INTO `p_desarrollo`
+(`idPDesarrollo`, `idPregunta`, `Enunciado`, `RespuestaEsperada`, `SeccionPId`) VALUES
+  -- Test 3 (Sesión 3 - U1)
+  (3, 6,
+   'Menciona dos detalles del parrafo que apoyen la idea principal.',
+   'Detalles validos: espacios para jugar; ejercicio; beneficios para la salud; uso comunitario.',
+   2),
+
+  -- Test 4 (Sesión 4 - U1)
+  (4, 8,
+   'Une dos oraciones usando "sin embargo" y otras dos usando "ademas".',
+   'Debe mostrar contraste correcto con "sin embargo" y adicion con "ademas", manteniendo coherencia y puntuacion.',
+   3),
+
+  -- Test 5 (Sesión 5 - U2)
+  (5, 10,
+   'Esboza el plan de un cuento: protagonista, conflicto y desenlace en 3-4 lineas.',
+   'Debe incluir protagonista claro, conflicto coherente y desenlace plausible (orden: planteamiento-nudo-desenlace).',
+   4),
+
+  -- Test 6 (Sesión 6 - U2)
+  (6, 12,
+   'Escribe dos lineas de dialogo aplicando comillas y uso basico del guion o raya.',
+   'Uso correcto de comillas para el parlamento y signos de puntuacion; coherencia entre interlocutores.',
+   5),
+
+  -- Test 7 (Sesión 7 - U3)
+  (7, 14,
+   'Explica la regla de acentuacion de las palabras agudas y da dos ejemplos.',
+   'Define agudas (tilde si terminan en n, s o vocal) y entrega ejemplos correctos tildados.',
+   6),
+
+  -- Test 8 (Sesión 8 - U3)
+  (8, 16,
+   'Escribe una oracion que incluya un sustantivo, un adjetivo y un verbo, subraya cada uno.',
+   'Debe contener las tres clases solicitadas y ser gramaticalmente correcta.',
+   7),
+
+  -- Test 9 (Sesión 9 - U3)
+  (9, 18,
+   'Reescribe el siguiente texto evitando repeticiones mediante pronombres: "Ana vio a Ana en el patio y Ana saludo a Ana".',
+   'Uso adecuado de pronombres para evitar repeticion y mantener concordancia (ej.: "Ana vio a ella en el patio y la saludo").',
+   8);
+
+-- ======================================================
+-- VINCULOS TEST-PREGUNTA
+-- ======================================================
+INSERT INTO `test_has_pregunta` (`TestId`, `PreguntaId`) VALUES
+  (3, 5),  (3, 6),
+  (4, 7),  (4, 8),
+  (5, 9),  (5, 10),
+  (6, 11), (6, 12),
+  (7, 13), (7, 14),
+  (8, 15), (8, 16),
+  (9, 17), (9, 18);
+
+COMMIT;

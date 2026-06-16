@@ -1,0 +1,101 @@
+START TRANSACTION;
+
+-- 1. Geografía
+INSERT INTO `pais` (`idPais`, `Nombre`) VALUES (1, 'Chile');
+INSERT INTO `region` (`idRegion`, `Nombre`, `PaisId`) VALUES (1, 'Región Metropolitana', 1);
+INSERT INTO `provincia` (`idProvincia`, `Nombre`, `RegionId`) VALUES (1, 'Santiago', 1);
+INSERT INTO `comuna` (`idComuna`, `Nombre`, `ProvinciaId`) VALUES (1, 'Santiago', 1);
+INSERT INTO `colegio` (`idColegio`, `Nombre`, `Ubicacion`, `Telefono`, `ComunaId`) VALUES
+  (1, 'Escuela Aurora', 'Calle Aurora 123', '123456789', 1);
+
+-- 2. Personas
+INSERT INTO `persona` (
+  `RUT`, `Nombres`, `ApellidoPaterno`, `ApellidoMaterno`, `ComunaId`,
+  `Telefono`, `Correo`, `Direccion`, `FechaNacimiento`, `Genero`, `Estado`
+) VALUES
+  ('11111111-1','Pedro','González','Fuentes',1,'987654321','pedro@aurora.com','Calle Falsa 123','2010-01-01','Masculino','Activo'),
+  ('22222222-2','María','López','Vega',1,'123456789','maria@aurora.com','Calle Siempre Viva','1985-02-02','Femenino','Activo'),
+  ('33333333-3','Laura','Pérez','Torres',1,'555666777','laura@aurora.com','Calle Real','1980-03-03','Femenino','Activo');
+
+INSERT INTO `rol` (`idRol`, `Nombre`) VALUES
+  (1, 'Estudiante'),
+  (2, 'Profesor'),
+  (3, 'Apoderado');
+
+INSERT INTO `personarol` (`PersonaRUT`, `RolId`, `ColegioId`) VALUES
+  ('11111111-1', 1, 1),
+  ('22222222-2', 3, 1),
+  ('33333333-3', 2, 1);
+
+INSERT INTO `profesor` (`RUT`, `Especialidad`, `TituloProfesional`) VALUES
+  ('33333333-3','Lenguaje','Lic. en Letras');
+
+INSERT INTO `apoderado` (`RUT`, `Parentesco`) VALUES
+  ('22222222-2','Madre');
+
+-- 3. Academia
+INSERT INTO `curso` (`idCurso`, `Grado`, `Etapa`, `Letra`, `ProfesorJefeRUT`) VALUES
+  (1,'6°','Básica','B','33333333-3');
+
+INSERT INTO `asignatura` (`idAsignatura`, `Nombre`) VALUES
+  (2,'Lenguaje y Comunicación');
+
+INSERT INTO `unidad` (`idUnidad`, `Numero`, `Descripcion`, `AsignaturaId`) VALUES
+  (1, 1.0, 'Comprensión de textos', 2),
+  (2, 2.0, 'Producción escrita', 2);
+
+INSERT INTO `curso_has_unidad` (`CursoId`, `UnidadId`) VALUES
+  (1,1),
+  (1,2);
+
+INSERT INTO `estudiante` (`RUT`, `ApoderadoRUT`, `CursoId`, `Puntos`, `PromedioGeneral`) VALUES
+  ('11111111-1','22222222-2',1,10,85);
+
+-- 4. Sesiones
+INSERT INTO `sesion` (`idSesion`, `Bitacora`, `ObjetivoAprendizaje`, `UnidadId`) VALUES
+  (1, 'Bitácora de lectura', 'Analizar textos narrativos', 1),
+  (2, 'Bitácora de escritura', 'Redactar un cuento breve', 2);
+
+-- 5. Evaluación
+INSERT INTO `test` (`idTest`, `Puntaje`, `Descripcion`, `SesionId`) VALUES
+  (1, 10, 'Test de comprensión', 1),
+  (2, 10, 'Test de redacción', 2);
+
+INSERT INTO `pregunta` (`idPregunta`, `Tipo`, `Puntaje`) VALUES
+  (1, 'Alternativa', 5),
+  (2, 'Alternativa', 5),
+  (3, 'Desarrollo', 5),
+  (4, 'Desarrollo', 5);
+
+INSERT INTO `seccion_p` (`idSeccionP`, `Descripcion`) VALUES
+  (1, 'Sección A');
+
+INSERT INTO `p_alternativas` (`idPregunta`, `Enunciado`, `PA`, `PB`, `PC`, `PD`, `Correcta`, `SeccionPId`) VALUES
+  (1, '¿Cuál es el personaje principal?', 'Juan', 'Pedro', 'Ana', 'Lucía', 'Pedro', 1),
+  (2, '¿Qué estructura tiene un cuento?', 'Inicio, desarrollo y final', 'Solo inicio', 'Desarrollo y cierre', 'Resumen', 'Inicio, desarrollo y final', 1);
+
+INSERT INTO `p_desarrollo` (
+  `idPDesarrollo`, `idPregunta`, `Enunciado`, `RespuestaEsperada`, `SeccionPId`
+) VALUES
+  (1, 3, 'Describe al personaje principal del texto leído.', 'Debe incluir nombre, características y acciones clave.', 1),
+  (2, 4, 'Explica la estructura de un cuento utilizando un ejemplo.', 'Debe mencionar inicio, desarrollo y final, aplicados a una historia.', 1);
+
+INSERT INTO `test_has_pregunta` (`TestId`, `PreguntaId`) VALUES
+  (1, 1),  -- Alternativa
+  (1, 3),  -- Desarrollo
+  (2, 2),  -- Alternativa
+  (2, 4);  -- Desarrollo
+
+-- 6. Emociones
+INSERT INTO `emocion` (`idEmocion`, `Tipo`, `EscalaMax`) VALUES
+  (1, 'Ánimo', 5),
+  (2, 'Satisfacción', 5);
+
+-- 7. Inventario
+INSERT INTO `item` (`idItem`, `Nombre`, `Descripcion`, `Costo`) VALUES
+  (1,'Libro de cuentos','Lecturas 6° básico',2000);
+
+INSERT INTO `inventario` (`EstudianteRUT`, `ItemId`, `Cantidad`) VALUES
+  ('11111111-1',1,1);
+
+COMMIT;

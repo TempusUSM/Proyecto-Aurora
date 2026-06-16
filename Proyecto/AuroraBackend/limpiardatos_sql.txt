@@ -1,0 +1,46 @@
+-- Desactiva FKs para acelerar y evitar bloqueos por orden residual
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 1) Tablas hijas / de relación (primero lo que depende de otros)
+DELETE FROM `test_has_pregunta`;
+DELETE FROM `p_alternativas`;
+DELETE FROM `p_desarrollo`;
+DELETE FROM `desempeno`;
+DELETE FROM `notas`;
+DELETE FROM `estudiante_has_emocion`;
+DELETE FROM `estudiante_recordatorio`;
+DELETE FROM `inventario`;
+DELETE FROM `material`;
+DELETE FROM `recordatorio`;
+DELETE FROM `curso_has_unidad`;
+
+-- 2) Capas intermedias
+DELETE FROM `test`;
+DELETE FROM `pregunta`;
+DELETE FROM `sesion`;
+DELETE FROM `seccion_p`;
+DELETE FROM `unidad`;
+DELETE FROM `asignatura`;
+
+-- 3) Clave para tu error: borrar curso ANTES de profesor
+DELETE FROM `curso`;
+
+-- 4) Entidades que referencian persona / y otras
+DELETE FROM `estudiante`;
+DELETE FROM `apoderado`;
+DELETE FROM `profesor`;
+DELETE FROM `personarol`;
+
+-- 5) Catálogos y maestros restantes
+DELETE FROM `item`;
+DELETE FROM `emocion`;
+DELETE FROM `colegio`;
+DELETE FROM `comuna`;
+DELETE FROM `provincia`;
+DELETE FROM `region`;
+DELETE FROM `pais`;
+DELETE FROM `rol`;
+DELETE FROM `persona`;
+
+-- Reactiva FKs
+SET FOREIGN_KEY_CHECKS = 1;

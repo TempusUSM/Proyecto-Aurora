@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Test - Aurora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #f59e0b;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --info-color: #3b82f6;
+      
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .logo {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+    }
+
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .glims-display {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      object-fit: cover;
+    }
+
+    .logout-btn {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .progress-bar {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .progress-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .progress-counter {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .progress-track {
+      background: var(--border-color);
+      height: 8px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+      height: 100%;
+      border-radius: var(--radius-sm);
+      transition: width 0.3s ease;
+    }
+
+    .question-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .passage-section {
+      background: #f1f5f9;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--info-color);
+    }
+
+    .passage-text {
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .passage-image {
+      max-width: 100%;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 1rem;
+    }
+
+    .question-section {
+      margin-bottom: 2rem;
+    }
+
+    .question-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .option-item {
+      position: relative;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-secondary);
+    }
+
+    .option-label:hover {
+      border-color: var(--primary-color);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .option-input {
+      margin-right: 1rem;
+      transform: scale(1.2);
+    }
+
+    .option-text {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .option-label:has(input:checked) {
+      border-color: var(--primary-color);
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .textarea-input {
+      width: 100%;
+      min-height: 120px;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    .textarea-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Adding dynamic feedback animations */
+    .option-label.correct {
+      border-color: var(--success-color);
+      background: rgba(16, 185, 129, 0.1);
+      animation: correctPulse 0.6s ease;
+    }
+
+    .option-label.incorrect {
+      border-color: var(--danger-color);
+      background: rgba(239, 68, 68, 0.1);
+      animation: incorrectShake 0.6s ease;
+    }
+
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes incorrectShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @keyframes celebration {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.1) rotate(-5deg); }
+      50% { transform: scale(1.2) rotate(5deg); }
+      75% { transform: scale(1.1) rotate(-2deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .celebration {
+      animation: celebration 0.8s ease;
+    }
+
+    /* Adding progress celebration effects */
+    .progress-fill.celebrating {
+      background: linear-gradient(90deg, var(--success-color), var(--secondary-color));
+      animation: progressGlow 1s ease;
+    }
+
+    @keyframes progressGlow {
+      0% { box-shadow: none; }
+      50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+      100% { box-shadow: none; }
+    }
+
+    /* Adding floating feedback messages */
+    .feedback-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--success-color);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-xl);
+      font-size: 1.2rem;
+      font-weight: 600;
+      z-index: 1000;
+      opacity: 0;
+      animation: feedbackPop 2s ease;
+      pointer-events: none;
+    }
+
+    .feedback-message.incorrect {
+      background: var(--danger-color);
+    }
+
+    @keyframes feedbackPop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+      80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+      
+      .container {
+        margin: 1rem auto;
+        padding: 0 0.5rem;
+      }
+      
+      .question-card {
+        padding: 1.5rem;
+      }
+      
+      .progress-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="nav-left">
+        <a href="/dashboard" class="logo">
+          <i class="fas fa-star"></i>
+          Aurora
+        </a>
+        <div class="nav-links">
+          <a href="/tienda"><i class="fas fa-store"></i> Tienda</a>
+          <a href="/inventario"><i class="fas fa-backpack"></i> Inventario</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="glims-display">
+          <i class="fas fa-coins"></i>
+          <span>{{ glims or 0 }} Glims</span>
+        </div>
+        {% if skin_activa and skin_activa.Imagen %}
+          <img class="user-avatar" src="{{ skin_activa.Imagen | replace('\\','/') }}" alt="Skin activa">
+        {% else %}
+          <div class="user-avatar" style="background: var(--text-muted); display: flex; align-items: center; justify-content: center; color: white;">
+            <i class="fas fa-user"></i>
+          </div>
+        {% endif %}
+        <a href="/logout" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="progress-bar">
+      <div class="progress-header">
+        <h2 class="progress-title">
+          <i class="fas fa-question-circle"></i>
+          Pregunta {{ index + 1 }} de {{ total }}
+        </h2>
+        <div class="progress-counter">{{ index + 1 }}/{{ total }}</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: {{ ((index + 1) / total * 100) }}%"></div>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <form method="post" action="/desafio/test/{{ sesion_id }}" id="questionForm">
+        <input type="hidden" name="i" value="{{ index }}" />
+        <input type="hidden" name="pregunta_id" value="{{ item.pregunta_id }}" />
+
+        {% if pasaje_desc %}
+          <div class="passage-section">
+            <div class="passage-text">{{ pasaje_desc }}</div>
+          </div>
+        {% endif %}
+
+        {% if pasaje_img %}
+          <div class="passage-section">
+            <img src="{{ pasaje_img }}" alt="Texto de lectura" class="passage-image">
+          </div>
+        {% endif %}
+
+        <div class="question-section">
+          <div class="question-text">{{ item.enunciado }}</div>
+
+          {% if item.tipo == "alternativa" %}
+            <div class="options-container">
+              {% for clave, opcion in item.opciones %}
+                {% if opcion %}
+                  <div class="option-item">
+                    <label class="option-label">
+                      <input
+                        type="radio"
+                        name="respuesta"
+                        value="{{ clave }}"
+                        class="option-input"
+                        {% if loop.first %}required{% endif %}
+                        {% if respuesta_actual == clave %}checked{% endif %}
+                      />
+                      <span class="option-text">{{ opcion }}</span>
+                    </label>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% elif item.tipo == "desarrollo" %}
+            <textarea
+              name="respuesta"
+              class="textarea-input"
+              placeholder="Escribe tu respuesta aquí..."
+              required
+            >{{ respuesta_actual }}</textarea>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          {% if index + 1 < total %}
+            <i class="fas fa-arrow-right"></i> Siguiente
+          {% else %}
+            <i class="fas fa-check"></i> Finalizar
+          {% endif %}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Adding dynamic JavaScript for Duolingo-style interactions -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let selectedAnswer = null;
+      let feedbackShown = false;
+
+      // Dynamic option selection with delayed feedback
+      const optionInputs = document.querySelectorAll('.option-input');
+      const optionLabels = document.querySelectorAll('.option-label');
+      
+      optionInputs.forEach((input, index) => {
+        input.addEventListener('change', function() {
+          // Remove previous feedback classes
+          optionLabels.forEach(label => {
+            label.classList.remove('correct', 'incorrect');
+          });
+          
+          // Store selected answer for later feedback
+          selectedAnswer = this.closest('.option-label');
+          feedbackShown = false;
+          
+          // Add selection animation
+          selectedAnswer.style.transform = 'scale(1.02)';
+          setTimeout(() => {
+            selectedAnswer.style.transform = 'scale(1)';
+          }, 200);
+        });
+      });
+
+      // Progress celebration
+      function celebrateProgress() {
+        const progressFill = document.querySelector('.progress-fill');
+        progressFill.classList.add('celebrating');
+        setTimeout(() => progressFill.classList.remove('celebrating'), 1000);
+      }
+
+      // Feedback messages
+      function showFeedbackMessage(message, type) {
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.className = `feedback-message ${type}`;
+        feedbackDiv.textContent = message;
+        document.body.appendChild(feedbackDiv);
+        
+        setTimeout(() => {
+          document.body.removeChild(feedbackDiv);
+        }, 2000);
+      }
+
+      const form = document.getElementById('questionForm');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      form.addEventListener('submit', function(e) {
+        // Show feedback before submitting if answer was selected and feedback not shown yet
+        if (selectedAnswer && !feedbackShown) {
+          e.preventDefault();
+          feedbackShown = true;
+          
+          // Simulate feedback (in real app, this would come from server)
+          const isCorrect = Math.random() > 0.3; // Simulate 70% correct rate
+          if (isCorrect) {
+            selectedAnswer.classList.add('correct');
+            showFeedbackMessage('¡Excelente! 🎉', 'correct');
+            celebrateProgress();
+          } else {
+            selectedAnswer.classList.add('incorrect');
+            showFeedbackMessage('¡Inténtalo de nuevo! 💪', 'incorrect');
+          }
+          
+          // Submit form after showing feedback
+          setTimeout(() => {
+            submitBtn.style.transform = 'scale(0.95)';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            
+            setTimeout(() => {
+              form.submit();
+            }, 500);
+          }, 1500);
+        } else {
+          // Normal submission for textarea or when feedback already shown
+          submitBtn.style.transform = 'scale(0.95)';
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+        }
+      });
+
+      // Add entrance animation to question card
+      const questionCard = document.querySelector('.question-card');
+      questionCard.style.opacity = '0';
+      questionCard.style.transform = 'translateY(20px)';
+      
+      setTimeout(() => {
+        questionCard.style.transition = 'all 0.6s ease';
+        questionCard.style.opacity = '1';
+        questionCard.style.transform = 'translateY(0)';
+      }, 100);
+
+      // Textarea dynamic feedback
+      const textarea = document.querySelector('.textarea-input');
+      if (textarea) {
+        textarea.addEventListener('input', function() {
+          const wordCount = this.value.trim().split(/\s+/).length;
+          if (wordCount > 10) {
+            this.style.borderColor = 'var(--success-color)';
+            this.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+          } else {
+            this.style.borderColor = 'var(--warning-color)';
+            this.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.1)';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

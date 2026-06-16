@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Emocional y Desempeño</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Marked (Markdown -> HTML) -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- DOMPurify (sanitizar HTML) - opcional pero recomendado -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
+<style>
+    .card { margin-bottom: 20px; }
+    :root {
+        --primary-color: #6366f1;
+        --secondary-color: #f59e0b;
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --info-color: #3b82f6;
+        --bg-primary: #f8fafc;
+        --bg-secondary: #ffffff;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+
+    /* Navigation */
+    .navbar {
+        background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+        padding: 1rem 0;
+        box-shadow: var(--shadow-lg);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand { color: white; font-weight: 800; font-size: 1.5rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-brand i { font-size: 2rem; background: linear-gradient(135deg, var(--primary-color), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-link { color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 600; padding: 0.5rem 1rem; border-radius: var(--radius-md); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-link:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+    /* Main Content */
+    .main-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+
+    .welcome-section { text-align: center; margin-bottom: 3rem; }
+    .welcome-title { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--primary-color), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+    .welcome-subtitle { font-size: 1.2rem; color: var(--text-secondary); font-weight: 600; }
+
+    /* Action Cards */
+    .action-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+    .action-card { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .action-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    .card-icon { width: 60px; height: 60px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; color: white; }
+    .desempeno-card .card-icon { background: linear-gradient(135deg, var(--info-color), #0ea5e9); }
+    .material-card .card-icon { background: linear-gradient(135deg, var(--success-color), #059669); }
+    .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
+    .card-description { color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
+    .card-button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-color), #8b5cf6); color: white; }
+    .btn-secondary { background: var(--bg-primary); color: var(--text-primary); border: 2px solid var(--border-color); }
+    .card-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    /* Stats Section */
+    .stats-section { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
+    .stats-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+    .stat-item { text-align: center; padding: 1.5rem; background: var(--bg-primary); border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+    .stat-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.2rem; color: white; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; }
+    .stat-label { color: var(--text-secondary); font-weight: 600; }
+
+    @media (max-width: 768px) {
+        .action-cards { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* small polish for the resumen block */
+    .resumen-ia p { margin-bottom: 0.6rem; color: var(--text-primary); }
+    .resumen-ia strong { font-weight: 700; color: #111827; }
+</style>
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/menu_profesor" class="nav-brand"><i class="fas fa-chalkboard-teacher"></i> Aurora</a>
+        <div class="nav-links">
+            <a href="/menu_profesor" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+            <a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container main-container">
+
+    <h1 class="text-center mb-4">Dashboard Emocional y Desempeño</h1>
+
+    <!-- Formulario de filtros -->
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label>Curso:</label>
+            <select class="form-select" name="curso">
+                <option value="">-- Todos los cursos --</option>
+                {% for c in cursos %}
+                    <option value="{{ c.idCurso }}" {% if selected_curso|int == c.idCurso %}selected{% endif %}>
+                        {{ c.Grado }}{{ c.Letra }} - {{ c.Etapa }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Estudiante:</label>
+            <select class="form-select" name="estudiante">
+                <option value="">-- Todos los estudiantes --</option>
+                {% for e in estudiantes %}
+                    <option value="{{ e.RUT }}" {% if selected_estudiante == e.RUT %}selected{% endif %}>
+                        {{ e.persona.Nombres }} {{ e.persona.ApellidoPaterno }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4 align-self-end">
+            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        </div>
+    </form>
+
+    <!-- Desempeño Académico -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">Desempeño Académico</div>
+        <div class="card-body">
+            <canvas id="desempenoChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Escalas Emocionales -->
+    <div class="card">
+        <div class="card-header bg-success text-white">Chequeos Emocionales</div>
+        <div class="card-body">
+            <canvas id="emocionalChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Resumen de IA (renderizado en cliente con marked) -->
+    {% if resumen %}
+    <div class="card">
+        <div class="card-header bg-warning text-dark">Resumen Emocional (IA)</div>
+        <div class="card-body">
+            <div id="resumenIA" class="resumen-ia"></div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    // Datos para los gráficos (los envía el servidor)
+    const FECHAS = {{ fechas | tojson }};
+    const EMOCIONES = {{ emociones | tojson }};
+    const NOTAS = [
+        {% for d in desempenos %}{{ d.NotaTest }}{% if not loop.last %},{% endif %}{% endfor %}
+    ];
+    const ESTUDIANTES_LABELS = [
+        {% for d in desempenos %}'{{ d.EstudianteRUT }}'{% if not loop.last %},{% endif %}{% endfor %}
+    ];
+</script>
+
+<script>
+/* Renderizar resumen IA (markdown -> HTML) con marked + DOMPurify */
+{% if resumen %}
+(function(){
+    try {
+        const resumenRaw = {{ resumen | tojson }}; // seguro desde Jinja
+
+        // marked.parse convierte markdown a HTML (gfm y saltos)
+        let resumenHtml = marked.parse(resumenRaw, { gfm: true, breaks: true });
+
+        // sanitizar si DOMPurify está disponible
+        if (window.DOMPurify && typeof DOMPurify.sanitize === 'function') {
+            resumenHtml = DOMPurify.sanitize(resumenHtml);
+        }
+
+        const cont = document.getElementById("resumenIA");
+        if (cont) cont.innerHTML = resumenHtml;
+    } catch (err) {
+        console.error("Error renderizando resumen IA:", err);
+        // fallback: mostrar texto crudo (escapado)
+        const cont = document.getElementById("resumenIA");
+        if (cont) cont.textContent = {{ resumen | tojson }};
+    }
+})();
+{% endif %}
+
+/* Funciones para crear los gráficos (puedes dejar esto en dashboard.js si prefieres) */
+function crearGraficoDesempeno() {
+    const ctx = document.getElementById('desempenoChart').getContext('2d');
+    const coloresNotas = NOTAS.map(n => {
+        if (n < 50) return 'rgba(255, 99, 132, 0.7)';
+        if (n < 80) return 'rgba(255, 206, 86, 0.7)';
+        return 'rgba(75, 192, 192, 0.7)';
+    });
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ESTUDIANTES_LABELS,
+            datasets: [{
+                label: 'Nota Test',
+                data: NOTAS,
+                backgroundColor: coloresNotas,
+                borderColor: coloresNotas.map(c => c.replace('0.7','1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { title: { display: true, text: 'Desempeño Académico por Estudiante' } },
+            scales: { y: { beginAtZero: true, max: 100 }, x: { ticks: { maxRotation: 45, minRotation: 45 } } }
+        }
+    });
+}
+
+function crearGraficoEmocional() {
+    const ctx = document.getElementById('emocionalChart').getContext('2d');
+    const emojisMap = {1:'😢',2:'😟',3:'😐',4:'🙂',5:'😁'};
+    const emojiPoints = EMOCIONES.map(e => emojisMap[e] || '');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: FECHAS,
+            datasets: [{
+                label: 'Escala Emocional',
+                data: EMOCIONES,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.3,
+                fill: true,
+                pointStyle: emojiPoints,
+                pointRadius: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { title: { display: true, text: 'Evolución Emocional' }, legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 5 }, x: { ticks: { maxRotation: 45, minRotation: 45 } } }
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Si usas un dashboard.js externo, puedes quitar estas líneas
+    try { crearGraficoDesempeno(); } catch(e) { console.warn(e); }
+    try { crearGraficoEmocional(); } catch(e) { console.warn(e); }
+});
+</script>
+
+<!-- Si prefieres tener el código JS en archivo externo, deja esta línea y borra las funciones internas arriba -->
+<!-- <script src="/statics/js/dashboard.js"></script> -->
+
+</body>
+</html>

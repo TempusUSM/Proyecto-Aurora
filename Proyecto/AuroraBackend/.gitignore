@@ -1,0 +1,16 @@
+# Ignora venv en cualquier carpeta del repo
+**/venv/
+
+# Secretos y entornos
+.env
+.env.*
+
+# Python / OS / IDE
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+.vscode/
+.DS_Store
+Thumbs.db
+*.sqlite3

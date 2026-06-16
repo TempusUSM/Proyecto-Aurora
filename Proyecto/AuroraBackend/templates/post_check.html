@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Post-check - Aurora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #f59e0b;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --info-color: #3b82f6;
+      
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .logo {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+    }
+
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .glims-display {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      object-fit: cover;
+    }
+
+    .logout-btn {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .reward-banner {
+      background: linear-gradient(135deg, var(--success-color), #059669);
+      color: white;
+      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .reward-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .reward-content h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .reward-content p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .check-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .check-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .check-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--success-color), #059669);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 2rem;
+    }
+
+    .check-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .check-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .scale-input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      font-size: 1.1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: var(--bg-secondary);
+    }
+
+    .scale-input:focus {
+      outline: none;
+      border-color: var(--success-color);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .scale-helper {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .textarea-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    .textarea-input:focus {
+      outline: none;
+      border-color: var(--success-color);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .finish-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--success-color), #059669);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .finish-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .finish-btn:active {
+      transform: translateY(0);
+    }
+
+    .session-info {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .emoji-scale {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .emoji-scale input[type="radio"] {
+      display: none;
+    }
+
+    .emoji-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-secondary);
+      flex: 1;
+      text-align: center;
+    }
+
+    .emoji-option:hover {
+      border-color: var(--success-color);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .emoji-scale input[type="radio"]:checked + .emoji-option {
+      border-color: var(--success-color);
+      background: rgba(16, 185, 129, 0.1);
+      transform: scale(1.05);
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .emoji-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .emoji-scale input[type="radio"]:checked + .emoji-option .emoji-text {
+      color: var(--success-color);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+      
+      .nav-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+      
+      .container {
+        margin: 1rem auto;
+        padding: 0 0.5rem;
+      }
+      
+      .check-card {
+        padding: 1.5rem;
+      }
+      
+      .check-title {
+        font-size: 1.5rem;
+      }
+      
+      .reward-banner {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .emoji-scale {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .emoji-option {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+      }
+      
+      .emoji {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="nav-left">
+        <a href="/dashboard" class="logo">
+          <i class="fas fa-star"></i>
+          Aurora
+        </a>
+        <div class="nav-links">
+          <a href="/tienda"><i class="fas fa-store"></i> Tienda</a>
+          <a href="/inventario"><i class="fas fa-backpack"></i> Inventario</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="glims-display">
+          <i class="fas fa-coins"></i>
+          <span>{{ glims or 0 }} Glims</span>
+        </div>
+        {% if skin_activa and skin_activa.Imagen %}
+          <img class="user-avatar" src="{{ skin_activa.Imagen | replace('\\','/') }}" alt="Skin activa">
+        {% else %}
+          <div class="user-avatar" style="background: var(--text-muted); display: flex; align-items: center; justify-content: center; color: white;">
+            <i class="fas fa-user"></i>
+          </div>
+        {% endif %}
+        <a href="/logout" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    {% if glims_earned is not none %}
+      <div class="reward-banner">
+        <div class="reward-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div class="reward-content">
+          <h3>¡Excelente trabajo!</h3>
+          {% if glims_earned|int > 0 %}
+            <p>Has ganado <strong>+{{ glims_earned }} Glims</strong> por tu desempeño (Puntaje: {{ score }})</p>
+          {% else %}
+            <p>Esta vez no sumaste Glims (Puntaje: {{ score }}). ¡Sigue practicando para mejorar!</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-icon">
+          <i class="fas fa-clipboard-check"></i>
+        </div>
+        <h1 class="check-title">Post-check</h1>
+        <p class="check-subtitle">Cuéntanos cómo te sientes después de completar el test</p>
+      </div>
+
+      <form method="post" action="/desafio/postcheck/{{ sesion_id }}">
+        <div class="form-group">
+          <label class="form-label">¿Cómo te sientes ahora?</label>
+          <div class="emoji-scale">
+            <input type="radio" name="escala" value="1" id="emoji1" required>
+            <label for="emoji1" class="emoji-option">
+              <span class="emoji">😢</span>
+              <span class="emoji-text">Muy mal</span>
+            </label>
+            
+            <input type="radio" name="escala" value="2" id="emoji2" required>
+            <label for="emoji2" class="emoji-option">
+              <span class="emoji">😕</span>
+              <span class="emoji-text">Mal</span>
+            </label>
+            
+            <input type="radio" name="escala" value="3" id="emoji3" required>
+            <label for="emoji3" class="emoji-option">
+              <span class="emoji">😐</span>
+              <span class="emoji-text">Regular</span>
+            </label>
+            
+            <input type="radio" name="escala" value="4" id="emoji4" required>
+            <label for="emoji4" class="emoji-option">
+              <span class="emoji">😊</span>
+              <span class="emoji-text">Bien</span>
+            </label>
+            
+            <input type="radio" name="escala" value="5" id="emoji5" required>
+            <label for="emoji5" class="emoji-option">
+              <span class="emoji">😄</span>
+              <span class="emoji-text">Excelente</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Coméntanos brevemente</label>
+          <textarea name="contexto" class="textarea-input" placeholder="Comparte tu experiencia (opcional)"></textarea>
+        </div>
+        
+        <button type="submit" class="finish-btn">
+          <i class="fas fa-check-circle"></i> Finalizar
+        </button>
+      </form>
+
+      <div class="session-info">
+        <i class="fas fa-info-circle"></i> Sesión: {{ sesion_id }}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
